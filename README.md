@@ -25,10 +25,10 @@ sensor:
 | **log_location** | no | | Full path to the logfile.
 
 **Default view:**
-![Default view](/img/sensor.png)
+![Default view](/img/sensor.jpg)
 
 **Card view:**
-![Card view](/img/sensor_card.png)
+![Card view](/img/sensor_card.jpg)
 
 If a new IP is detected, it will be added to a `.logged_in_ips.yaml` file in your configdir, with this information:
 
