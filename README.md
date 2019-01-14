@@ -10,6 +10,11 @@ For example:
 **Example configuration.yaml:**
 
 ```yaml
+# if you're missing a logger setup, paste the below in your configuration.yaml file
+logger:
+  default: critical
+
+# this is the setup of the custom sensor
 sensor:
   - platform: successful_logins
 ```
@@ -23,6 +28,7 @@ sensor:
 | **exclude** | no | | A list of IP adresses you want to exclude.
 | **provider** | no | 'ipapi' | The provider you want to use for GEO Lookup, 'ipapi', 'extreme', 'ipvigilante'.
 | **log_location** | no | | Full path to the logfile.
+| **time_frame** | 12 | | The sensor scan time frame in log file, value is in hours.
 
 **Default view:**
 ![Default view](/img/sensor.jpg)
