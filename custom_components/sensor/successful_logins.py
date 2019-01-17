@@ -46,7 +46,7 @@ PROVIDERS = ['ipapi', 'extreme', 'ipvigilante']
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_PROVIDER, default='ipapi'): vol.In(PROVIDERS),
-    vol.Optional(CONF_OLD_IP_REMOVAL_IN_HOURS, default=12): cv.small_float,
+    vol.Optional(CONF_OLD_IP_REMOVAL_IN_HOURS, default=12): cv.positive_int,
     vol.Optional(CONF_LOG_LOCATION, default=''): cv.string,
     vol.Optional(CONF_NOTIFY, default=True): cv.boolean,
     vol.Optional(CONF_EXCLUDE, default='None'):
@@ -203,8 +203,8 @@ def get_log_content(file, time_frame, exclude):
     with open(file) as log_file:
         for line in reversed(log_file.readlines()):
             if len(line.split(' ')) < 2:
-                continue 
-                
+                continue
+
             date = line.split(' ')[0]
             time = line.split(' ')[1]
             access = date + ' ' + time
@@ -212,7 +212,11 @@ def get_log_content(file, time_frame, exclude):
             if (access.strip() == ''):
                 continue
 
-            datetime_object = datetime.strptime(access,'%Y-%m-%d %H:%M:%S')
+            try:
+                datetime_object = datetime.strptime(access,'%Y-%m-%d %H:%M:%S')
+            except:
+                continue
+
             time_difference_in_hours = (datetime.now() - datetime_object) / timedelta(hours=1)
 
             """only lines in time_frame are considered"""
@@ -287,8 +291,13 @@ def update_ip(file, ip_address, access_time):
     _LOGGER.debug(PLATFORM_NAME + ': Found known IP %s, updating timestamps.', ip_address)
     info = get_outfile_content(file)
 
-    last = info[ip_address]['last_authenticated']
-    info[ip_address]['previous_authenticated_time'] = last
+    try:
+        last = info[ip_address]['last_authenticated']
+        info[ip_address]['previous_authenticated_time'] = last
+    except:
+        info[ip_address] = {}
+        _LOGGER.info('IP ' + ip_address + ' not found in file, adding it as new entry')
+
     info[ip_address]['last_authenticated'] = access_time
     info[ip_address]['hostname'] = hostname
 
@@ -306,9 +315,9 @@ def clean_old_ips(file, time_frame):
 
         """remove ip entry in old"""
         if time_difference_in_hours >= time_frame:
-            _LOGGER.info('Removing old IP ' + value['ip_address'])
+            _LOGGER.info('Removing old IP ' + key)
         else:
-            _LOGGER.debug(PLATFORM_NAME + ': IP ' + value['ip_address'] + ' will be removed in ' + str("{0:.2f}".format(time_frame - time_difference_in_hours)) + ' hours')
+            _LOGGER.debug(PLATFORM_NAME + ': IP ' + key + ' will be removed in ' + str("{0:.2f}".format(time_frame - time_difference_in_hours)) + ' hours')
             newList[key] = value
 
     if len(newList) == 0:
