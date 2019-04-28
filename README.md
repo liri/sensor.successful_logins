@@ -1,3 +1,5 @@
+* this sensor is not working anymore due to changes in the way ha writes to log file *
+
 # sensor.successful_logins
 Home Assistant sensor which allows you to get information about successful logins.
 
