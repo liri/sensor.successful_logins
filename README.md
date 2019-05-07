@@ -1,11 +1,11 @@
 # sensor.successful_logins
 Home Assistant sensor which allows you to get information about successful logins.
 
-To get started put `/custom_components/sensor/successful_logins.py` in your config directory: 
-`<config directory>/custom_components/sensor/successful_logins.py`  
+To get started put `/custom_components/successful_logins/sensor.py` in your config directory: 
+`<config directory>/custom_components/successful_logins/sensor.py`  
 
 For example: 
-`/home/homeassistant/.homeassistant/custom_components/sensor/successful_logins.py`  
+`/home/homeassistant/.homeassistant/custom_components/successful_logins/sensor.py`  
 
 **Example configuration.yaml:**
 
